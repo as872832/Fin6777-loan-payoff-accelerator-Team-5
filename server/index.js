@@ -8,7 +8,10 @@ require('dotenv').config();
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: 'http://localhost:5173','https://fin6777-loan-payoff-accelerator-tea.vercel.app' }));
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://fin6777-loan-payoff-accelerator-tea.vercel.app'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
