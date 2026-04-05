@@ -6,7 +6,11 @@ ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip,
 export default function PayoffChart({ baseline, accelerated }) {
   if (!baseline || baseline.length === 0) return null;
 
-  const labels = baseline.map((_, i) => `Mo ${i}`);
+const now = new Date();
+const labels = baseline.map((_, i) => {
+  const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+  return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+});
 
   return (
     <div style={{ position: 'relative', height: '280px', margin: '1rem 0' }}>
