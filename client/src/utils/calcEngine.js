@@ -1,10 +1,20 @@
+function calcRequiredPayment(balance, annualRate, termMonths) {
+  const r = annualRate / 12;
+  const n = termMonths;
+  if (!r || !n) return balance / n;
+  return (balance * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+}
+
 export function calcPayoff(debts, strategy, extra = 0) {
-  let remaining = debts.map(d => ({
-    ...d,
-    balance: parseFloat(d.balance),
-    rate: parseFloat(d.rate) / 100,
-    minPayment: parseFloat(d.minPayment)
-  }));
+  let remaining = debts.map(d => {
+    const balance = parseFloat(d.balance) || 0;
+    const rate = (parseFloat(d.rate) || 0) / 100;
+    const termMonths = d.termMonths ? parseInt(d.termMonths) : null;
+    const enteredMin = parseFloat(d.minPayment) || 0;
+    const requiredMin = termMonths ? calcRequiredPayment(balance, rate, termMonths) : null;
+    const minPayment = requiredMin ? Math.max(enteredMin, requiredMin) : enteredMin;
+    return { ...d, balance, rate, minPayment, termMonths };
+  });
 
   const sorted = strategy === 'avalanche'
     ? remaining.sort((a, b) => b.rate - a.rate)
@@ -27,16 +37,18 @@ export function calcPayoff(debts, strategy, extra = 0) {
       d.balance += interest;
       d.balance -= d.minPayment;
 
-      if (i === 0) {
+      if (i === 0 && extraLeft > 0) {
         d.balance -= extraLeft;
         extraLeft = 0;
       }
 
-      if (d.balance < 0) {
+      if (d.balance <= 0) {
+        const freed = Math.abs(d.balance);
+        d.balance = 0;
         if (i + 1 < sorted.length) {
           sorted[i + 1].minPayment += d.minPayment;
+          if (freed > 0) extraLeft += freed;
         }
-        d.balance = 0;
       }
     }
 
@@ -51,7 +63,6 @@ export function calcPayoff(debts, strategy, extra = 0) {
 export function calcWhatIf(debts, strategy, extra = 0) {
   const baseline = calcPayoff(debts, strategy, 0);
   const accelerated = calcPayoff(debts, strategy, extra);
-
   return {
     baselineMonths: baseline.months,
     acceleratedMonths: accelerated.months,

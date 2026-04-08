@@ -21,15 +21,15 @@ export default function StrategyPicker({ strategy, setStrategy, snowballResult, 
             <span style={{ fontSize: '15px', fontFamily: 'DM Serif Display, serif', color: strategy === key ? T.gold : T.navy }}>{label}</span>
             {badge && <span style={{ fontSize: '10px', background: T.gold, color: T.navy, padding: '2px 8px', borderRadius: '20px', fontWeight: 700 }}>{badge}</span>}
           </div>
-          <div style={{ fontSize: '12px', color: strategy === key ? T.muted : T.slate, marginBottom: '1rem', lineHeight: 1.5 }}>{desc}</div>
+          <div style={{ fontSize: '12px', color: strategy === key ? '#c8d6e5' : T.slate, marginBottom: '1rem', lineHeight: 1.5 }}>{desc}</div>
           {result && (
-            <div style={{ borderTop: `1px solid ${strategy === key ? 'rgba(255,255,255,0.1)' : 'rgba(15,35,64,0.08)'}`, paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <div style={{ borderTop: `1px solid ${strategy === key ? 'rgba(255,255,255,0.15)' : 'rgba(15,35,64,0.08)'}`, paddingTop: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-                <span style={{ color: strategy === key ? T.muted : T.slate }}>Debt-free in</span>
-                <span style={{ fontWeight: 600, color: strategy === key ? T.white : T.navy }}>{result.months} months</span>
+                <span style={{ color: strategy === key ? '#c8d6e5' : T.slate }}>Debt-free in</span>
+                <span style={{ fontWeight: 600, color: strategy === key ? '#ffffff' : T.navy }}>{result.months} months</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-                <span style={{ color: strategy === key ? T.muted : T.slate }}>Total interest</span>
+                <span style={{ color: strategy === key ? '#c8d6e5' : T.slate }}>Total interest</span>
                 <span style={{ fontWeight: 600, color: strategy === key ? T.goldLight : T.navy }}>${Math.round(result.totalInterest).toLocaleString()}</span>
               </div>
             </div>

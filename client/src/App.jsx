@@ -347,15 +347,15 @@ function Dashboard({ debts, addDebt, removeDebt, strategy, setStrategy, extra, s
                   borderBottom: i < debts.length - 1 ? `1px solid ${T.borderLight}` : 'none',
                   transition: 'background 0.15s'
                 }}>
-                  <span style={{ fontSize: '11px', padding: '3px 10px', borderRadius: '20px', fontWeight: 600, background: tc.bg, color: tc.color, flexShrink: 0, whiteSpace: 'nowrap' }}>{d.type}</span>
                   <span style={{ flex: 1, fontSize: '14px', fontWeight: 600, color: T.navy }}>{d.name}</span>
-                  <span style={{ fontSize: '13px', color: T.slate, minWidth: '80px', textAlign: 'right' }}>${parseFloat(d.balance).toLocaleString()}</span>
-                  <span style={{ fontSize: '13px', color: T.muted, minWidth: '70px', textAlign: 'right' }}>{d.rate}% APR</span>
-                  <button onClick={() => removeDebt(d._id)} style={{
-                    background: 'none', border: `1px solid rgba(146,43,33,0.2)`,
-                    borderRadius: '6px', color: T.danger, fontSize: '12px',
-                    padding: '3px 10px', transition: 'all 0.15s'
-                  }}>Remove</button>
+<span style={{ fontSize: '13px', color: T.slate, minWidth: '80px', textAlign: 'right' }}>${parseFloat(d.balance).toLocaleString()}</span>
+<span style={{ fontSize: '13px', color: T.muted, minWidth: '70px', textAlign: 'right' }}>{d.rate}% APR</span>
+{d.termMonths && <span style={{ fontSize: '12px', color: T.muted, minWidth: '60px', textAlign: 'right' }}>{d.termMonths} mo</span>}
+<button onClick={() => removeDebt(d._id)} style={{
+  background: 'none', border: `1px solid rgba(146,43,33,0.2)`,
+  borderRadius: '6px', color: T.danger, fontSize: '12px',
+  padding: '3px 10px', transition: 'all 0.15s'
+}}>Remove</button>
                 </div>
               );
             })}
