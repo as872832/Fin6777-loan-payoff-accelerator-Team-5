@@ -9,7 +9,7 @@ export default function PayoffChart({ baseline, accelerated }) {
   const now = new Date();
   const labels = baseline.map((_, i) => {
     const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-    return d.toLocaleDateString('en-US', { month: 'short', year: "'yy" });
+    return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
   });
 
   return (
