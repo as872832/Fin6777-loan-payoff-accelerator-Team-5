@@ -7,7 +7,8 @@ export default function PayoffChart({ baseline, accelerated }) {
   if (!baseline || baseline.length === 0) return null;
 
   const now = new Date();
-  const labels = baseline.map((_, i) => {
+  const maxLength = Math.max(baseline.length, accelerated ? accelerated.length : 0);
+  const labels = Array.from({ length: maxLength }, (_, i) => {
     const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
     return d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
   });
@@ -16,6 +17,7 @@ export default function PayoffChart({ baseline, accelerated }) {
     <div style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(15,35,64,0.1)', borderRadius: '16px', padding: '1.5rem', backdropFilter: 'blur(8px)' }}>
       <div style={{ position: 'relative', height: '280px' }}>
         <Line
+          key={accelerated ? accelerated.length + accelerated[0] + accelerated[accelerated.length - 1] : 'empty'}
           data={{
             labels,
             datasets: [

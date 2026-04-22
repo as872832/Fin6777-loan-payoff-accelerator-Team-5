@@ -11,9 +11,21 @@ export default function WhatIfSimulator({ result, extra, setExtra }) {
     <div style={{ background: 'rgba(255,255,255,0.9)', border: '1px solid rgba(15,35,64,0.1)', borderRadius: '16px', padding: '1.5rem', backdropFilter: 'blur(8px)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.25rem' }}>
         <label style={{ fontSize: '13px', color: T.slate, minWidth: '170px' }}>Extra monthly payment</label>
-        <input type="range" min="0" max="500" step="25" value={extra}
-          onChange={e => setExtra(Number(e.target.value))}
-          style={{ flex: 1, accentColor: T.gold }} />
+        <input
+          type="number"
+          min="0"
+          step="25"
+          value={extra}
+          onChange={e => setExtra(Math.max(0, parseFloat(e.target.value) || 0))}
+          placeholder="0"
+          style={{
+            flex: 1, padding: '10px 14px',
+            border: '1px solid #e2e2e2', borderRadius: '10px',
+            fontSize: '14px', outline: 'none',
+            fontFamily: 'DM Sans, sans-serif', color: T.navy,
+            boxSizing: 'border-box'
+          }}
+        />
         <div style={{
           minWidth: '64px', textAlign: 'center', padding: '4px 10px',
           background: `linear-gradient(135deg, ${T.gold}, ${T.goldLight})`,

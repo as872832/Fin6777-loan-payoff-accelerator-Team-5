@@ -13,12 +13,12 @@ export function calcPayoff(debts, strategy, extra = 0) {
     const enteredMin = parseFloat(d.minPayment) || 0;
     const requiredMin = termMonths ? calcRequiredPayment(balance, rate, termMonths) : null;
     const minPayment = requiredMin ? Math.max(enteredMin, requiredMin) : enteredMin;
-    return { ...d, balance, rate, minPayment, termMonths };
+    return { ...d, balance, rate, minPayment, originalMin: minPayment };
   });
 
   const sorted = strategy === 'avalanche'
-    ? remaining.sort((a, b) => b.rate - a.rate)
-    : remaining.sort((a, b) => a.balance - b.balance);
+    ? [...remaining].sort((a, b) => b.rate - a.rate)
+    : [...remaining].sort((a, b) => a.balance - b.balance);
 
   let months = 0;
   let totalInterest = 0;
@@ -26,30 +26,39 @@ export function calcPayoff(debts, strategy, extra = 0) {
 
   while (sorted.some(d => d.balance > 0) && months < 600) {
     months++;
-    let extraLeft = extra;
 
-    for (let i = 0; i < sorted.length; i++) {
-      const d = sorted[i];
+    // Step 1: apply interest to all debts
+    for (const d of sorted) {
       if (d.balance <= 0) continue;
-
       const interest = d.balance * (d.rate / 12);
       totalInterest += interest;
       d.balance += interest;
-      d.balance -= d.minPayment;
+    }
 
-      if (i === 0 && extraLeft > 0) {
-        d.balance -= extraLeft;
-        extraLeft = 0;
-      }
+    // Step 2: figure out total available payment this month
+    const totalMinimums = sorted.reduce((sum, d) => d.balance > 0 ? sum + d.minPayment : sum, 0);
+    let available = totalMinimums + extra;
 
-      if (d.balance <= 0) {
-        const freed = Math.abs(d.balance);
-        d.balance = 0;
-        if (i + 1 < sorted.length) {
-          sorted[i + 1].minPayment += d.minPayment;
-          if (freed > 0) extraLeft += freed;
-        }
-      }
+    // Step 3: apply minimums to all debts first
+    for (const d of sorted) {
+      if (d.balance <= 0) continue;
+      const payment = Math.min(d.minPayment, d.balance);
+      d.balance -= payment;
+      available -= payment;
+    }
+
+    // Step 4: apply remaining available (extra + any overpaid minimums) to target debt
+    for (const d of sorted) {
+      if (d.balance <= 0) continue;
+      const payment = Math.min(available, d.balance);
+      d.balance -= payment;
+      available -= payment;
+      if (available <= 0) break;
+    }
+
+    // Step 5: floor negatives to zero
+    for (const d of sorted) {
+      if (d.balance < 0) d.balance = 0;
     }
 
     balancesByMonth.push(
