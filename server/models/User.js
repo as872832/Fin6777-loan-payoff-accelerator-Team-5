@@ -6,7 +6,8 @@ const debtSchema = new mongoose.Schema({
   rate: Number,
   minPayment: Number,
   type: String,
-  termMonths: { type: Number, default: null }
+  termMonths: { type: Number, default: null },
+  installmentsRemaining: { type: Number, default: null }
 });
 
 const userSchema = new mongoose.Schema({
