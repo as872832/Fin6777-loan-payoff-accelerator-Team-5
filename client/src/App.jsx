@@ -172,11 +172,11 @@ function About() {
       <SectionLabel>The team</SectionLabel>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px', marginBottom: '2rem' }}>
         {[
-          { name: 'Team Member 1', role: 'Frontend & UI' },
-          { name: 'Team Member 2', role: 'Backend & Database' },
-          { name: 'Team Member 3', role: 'Calculation Engine' },
-          { name: 'Team Member 4', role: 'Security & Auth' },
-          { name: 'Team Member 5', role: 'Project Lead' },
+          { name: 'Valentin Valdes Nogueras', role: 'Frontend & UI' },
+          { name: 'Ashley Brookman', role: 'Backend & Database' },
+          { name: 'Mia Bruno', role: 'Calculation Engine' },
+          { name: 'Chandler Hackbarth', role: 'Security & Auth' },
+          { name: 'Tsai (Mimi) Lo', role: 'Project Lead' },
         ].map(({ name, role }, i) => (
           <Card key={name} className={`fade-up-${i % 4}`} style={{ textAlign: 'center', padding: '1.25rem' }}>
             <div style={{
